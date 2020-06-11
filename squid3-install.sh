@@ -4,8 +4,12 @@
 # Author: https://www.serverOk.in
 # Email: info@serverOk.in
 # Github: https://github.com/kripul/squid
+read -p "Input username for Squid proxy : " username
+read -p "Input password : " password
 
 if cat /etc/os-release | grep PRETTY_NAME | grep "Ubuntu 18.04"; then
+
+
     /usr/bin/apt update
     /usr/bin/apt -y install apache2-utils squid3
     touch /etc/squid/passwd
@@ -16,6 +20,8 @@ if cat /etc/os-release | grep PRETTY_NAME | grep "Ubuntu 18.04"; then
     /sbin/iptables-save
     service squid restart
     systemctl enable squid
+    /usr/bin/htpasswd -b -c /etc/squid/passwd $username $password
+
 elif cat /etc/os-release | grep PRETTY_NAME | grep "Ubuntu 16.04"; then
     /usr/bin/apt update
     /usr/bin/apt -y install apache2-utils squid3
@@ -27,6 +33,8 @@ elif cat /etc/os-release | grep PRETTY_NAME | grep "Ubuntu 16.04"; then
     /sbin/iptables-save
     service squid restart
     update-rc.d squid defaults
+    /usr/bin/htpasswd -b -c /etc/squid/passwd $username $password
+
 elif cat /etc/*release | grep DISTRIB_DESCRIPTION | grep "Ubuntu 14.04"; then
     /usr/bin/apt update
     /usr/bin/apt -y install apache2-utils squid3
@@ -40,6 +48,8 @@ elif cat /etc/*release | grep DISTRIB_DESCRIPTION | grep "Ubuntu 14.04"; then
     ln -s /etc/squid3 /etc/squid
     #update-rc.d squid3 defaults
     ln -s /etc/squid3 /etc/squid
+    /usr/bin/htpasswd -b -c /etc/squid/passwd $username $password
+
 elif cat /etc/os-release | grep PRETTY_NAME | grep "jessie"; then
     # OS = Debian 8
     /bin/rm -rf /etc/squid
@@ -54,6 +64,8 @@ elif cat /etc/os-release | grep PRETTY_NAME | grep "jessie"; then
     service squid3 restart
     update-rc.d squid3 defaults
     ln -s /etc/squid3 /etc/squid
+    /usr/bin/htpasswd -b -c /etc/squid/passwd $username $password
+
 elif cat /etc/os-release | grep PRETTY_NAME | grep "stretch"; then
     # OS = Debian 9
     /bin/rm -rf /etc/squid
@@ -67,6 +79,8 @@ elif cat /etc/os-release | grep PRETTY_NAME | grep "stretch"; then
     /sbin/iptables-save
     systemctl enable squid
     systemctl restart squid
+    /usr/bin/htpasswd -b -c /etc/squid/passwd $username $password
+
 elif cat /etc/os-release | grep PRETTY_NAME | grep "buster"; then
     # OS = Debian 10
     /bin/rm -rf /etc/squid
@@ -80,6 +94,8 @@ elif cat /etc/os-release | grep PRETTY_NAME | grep "buster"; then
     /sbin/iptables-save
     systemctl enable squid
     systemctl restart squid
+    /usr/bin/htpasswd -b -c /etc/squid/passwd $username $password
+    
 else
     echo "OS NOT SUPPORTED.\n"
     echo "Contact admin@serverok.in to add support for your os."
